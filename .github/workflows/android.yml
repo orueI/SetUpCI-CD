@@ -52,8 +52,10 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
+        uses: actions/checkout@v3
         run: chmod +x gradlew
       - name: Build with Gradle
+        uses: actions/checkout@v3
         run: ./gradlew build
 
       #      - name: Setup JDK
@@ -68,14 +70,17 @@ jobs:
 #            cache: gradle
 
       - name: Run lint
+        uses: actions/checkout@v3
         run: ./gradlew lintDebug
         continue-on-error: true
 
       - name: Run tests
+        uses: actions/checkout@v3
         run: ./gradlew testDebug
         continue-on-error: true
 
       - name: Build APK
+        uses: actions/checkout@v3
         if: ${{ success() }}
         run: ./gradlew assembleDebug --console=plain
 
