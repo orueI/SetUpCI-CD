@@ -1,54 +1,39 @@
-name: Android debug build
+name: Build and Test Android App
 
 on:
-  workflow_dispatch:
-    inputs:
-      versionName:
-        description: 'User-facing release version name'
-        required: true
-        default: "1.0.0"
-      versionCode:
-        description: 'versionCode or build number'
-        required: true
-        default: "1"
+  push:
+    branches: ["main", "dev", "master"]
+  pull_request:
+    branches: ["main", "dev", "master"]
 
 jobs:
-  debug-build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup versionName regardless of how this action is triggered
-        id: version_name
-        run: |
-          WORKFLOW_INPUT=${{ github.event.inputs.versionName }}
-          VERSION_NAME=${WORKFLOW_INPUT:-"1.0.0"}
-          echo "ORG_GRADLE_PROJECT_VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Setup versionCode regardless of how this action is triggered
-        id: version_code
-        run: |
-          WORKFLOW_INPUT=${{ github.event.inputs.versionCode }}
-          VERSION_CODE=${WORKFLOW_INPUT:-"1"}
-          echo "ORG_GRADLE_PROJECT_VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-java@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
-          java-version: 11
-          cache: 'gradle'
+          java-version: '11'
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      - name: Run lint
+        run: ./gradlew lintDebug
+        continue-on-error: true
 
-      - name: Build debug APK
-        run: ./gradlew --no-daemon assembleDebug
+      - name: Run tests
+        run: ./gradlew testDebug
+        continue-on-error: true
 
-      - name: Upload build file
-        uses: actions/upload-artifact@v3
+      - name: Build APK
+        if: ${{ success() }}
+        run: ./gradlew assembleDebug --console=plain
+
+      - name: Save APK to artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ success() }}
         with:
-          name: debug-build-apk
+          name: ${{ github.event_name }}-app
           path: app/build/outputs/apk/debug/app-debug.apk
-
-#
