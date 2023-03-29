@@ -1,0 +1,36 @@
+name: Build and Test Android App on Pull Request
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Run lint
+        run: ./gradlew lintDebug
+        continue-on-error: true
+
+      - name: Run tests
+        run: ./gradlew testDebug
+        continue-on-error: true
+
+      - name: Build APK
+        if: ${{ success() }}
+        run: ./gradlew assembleDebug --console=plain
+
+      - name: Save APK to artifacts
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event_name }}-app
+          path: app/build/outputs/apk/debug/app-debug.apk
