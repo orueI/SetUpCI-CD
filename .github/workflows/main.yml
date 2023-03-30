@@ -78,3 +78,7 @@ jobs:
       - name: Run lint
         run: ./gradlew lint
         continue-on-error: true
+
+      - name: Run test
+        run: ./gradlew test
+        continue-on-error: true
