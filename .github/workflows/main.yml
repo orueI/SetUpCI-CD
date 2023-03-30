@@ -82,3 +82,7 @@ jobs:
       - name: Run test
         run: ./gradlew test
         continue-on-error: true
+
+      - name: Build APK
+        if: ${{ success() }}
+        run: ./gradlew assembleDebug --console=plain
