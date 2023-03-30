@@ -71,6 +71,10 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Run lint
+      - name: Run echo
         run: echo "123"
+        continue-on-error: true
+
+      - name: Run lint
+        run: ./gradlew lint
         continue-on-error: true
