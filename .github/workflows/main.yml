@@ -86,3 +86,10 @@ jobs:
       - name: Build APK
         if: ${{ success() }}
         run: ./gradlew assembleDebug --console=plain
+
+      - name: Save APK to artifacts
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event_name }}-app
+          path: app/build/outputs/apk/debug/app-debug.apk
