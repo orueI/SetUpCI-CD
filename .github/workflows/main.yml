@@ -94,13 +94,23 @@ jobs:
           name: ${{ github.event_name }}-app
           path: app/build/outputs/apk/debug/app-debug.apk
 
+      - name: Create Tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.0 # Replace this with your desired tag name
+          release_name: Release ${{ github.sha }}
+          body: |
+            This is the release description.
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.sha }}
+            tag_name: v1.0.0 # Replace this with the same tag name used in the previous step
           release_name: Release ${{ github.sha }}
           draft: false
           prerelease: false
