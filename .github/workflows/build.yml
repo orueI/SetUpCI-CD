@@ -32,6 +32,7 @@ jobs:
 #          DEBUG_SECRET_KEY: ${{ secrets.DEBUG_SECRET_KEY }}
         run: |
           echo $TEST_SECRET
+          echo ${{ secrets }}
 #          echo $DEBUG_SECRET_KEY >> secrets.txt
 #
 #        run: |
