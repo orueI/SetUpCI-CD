@@ -28,7 +28,7 @@ jobs:
 
       - name: Echo secret
         run: |
-          my_secret_value="${{ secrets.MY_SECRET }}"
+          my_secret_value="${{ secrets.TEST_SECRET }}"
           echo "The value of MY_SECRET is: ${my_secret_value}"
 
 #      - name: Save APK to artifacts
