@@ -32,7 +32,15 @@ jobs:
 #          DEBUG_SECRET_KEY: ${{ secrets.DEBUG_SECRET_KEY }}
         run: |
           echo $TEST_SECRET
-          echo ${{ secrets }}
+          echo {{ secrets }}
+
+      - name: Use secret in CI script
+        run: |
+          my_secret_value="${{ secrets.MY_SECRET }}"
+          echo "The value of MY_SECRET is: ${my_secret_value}"
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+
 #          echo $DEBUG_SECRET_KEY >> secrets.txt
 #
 #        run: |

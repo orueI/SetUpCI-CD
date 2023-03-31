@@ -53,7 +53,7 @@
 name: Build and Test Android App on Pull Request
 
 on:
-  pull_request:
+#  pull_request:
 
 jobs:
   build-and-test:
