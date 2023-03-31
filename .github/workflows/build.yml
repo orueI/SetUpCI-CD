@@ -26,6 +26,9 @@ jobs:
       - name: Build with Gradle
         run: echo "123"
 
+      - name: Echo secret
+        run: echo {{ secrets.test_secret }}
+
 #      - name: Save APK to artifacts
 #        if: ${{ success() }}
 #        uses: actions/upload-artifact@v2
