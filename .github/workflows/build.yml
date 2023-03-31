@@ -26,6 +26,27 @@ jobs:
       - name: Build with Gradle
         run: echo "123"
 
+      - name: Echo secret
+        env:
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+#          DEBUG_SECRET_KEY: ${{ secrets.DEBUG_SECRET_KEY }}
+        run: |
+          echo $TEST_SECRET
+          echo {{ secrets }}
+
+      - name: Use secret in CI script
+        run: |
+          my_secret_value="${{ secrets.MY_SECRET }}"
+          echo "The value of MY_SECRET is: ${my_secret_value}"
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+
+#          echo $DEBUG_SECRET_KEY >> secrets.txt
+#
+#        run: |
+#          my_secret_value="${{ secrets.TEST_SECRET }}"
+#          echo "The value of MY_SECRET is: ${my_secret_value}"
+
 #      - name: Save APK to artifacts
 #        if: ${{ success() }}
 #        uses: actions/upload-artifact@v2
