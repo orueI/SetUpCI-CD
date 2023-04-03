@@ -83,6 +83,11 @@ jobs:
       #      - name: Run test
       #        run: ./gradlew test
       #        continue-on-error: true
+      - name: Echo name
+        run: echo ${{ github.ref_name }}
+
+      - name: Echo id
+        run: echo ${{ github.run_id }}
 
       - name: Build APK
         if: ${{ success() }}
