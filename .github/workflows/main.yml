@@ -91,7 +91,7 @@ jobs:
 
       - name: Build APK
         if: ${{ success() }}
-        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.run_id }}" --no-daemon
+        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
 
       - name: Save APK to artifacts
         if: ${{ success() }}
