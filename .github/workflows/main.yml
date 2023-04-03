@@ -52,15 +52,11 @@
 
 name: Build and Test Android App on Pull Request
 
-#on: TODO remove
-#  push:
-#    branches:
-      - 'master'
-
-#  pull_request:
+on:
+  pull_request:
 
 jobs:
-  build-and-test:
+  main:
     runs-on: ubuntu-latest
 
     steps:
@@ -98,10 +94,10 @@ jobs:
           path: |
             app/build/outputs/**/*.apk
             app/build/outputs/**/*.aab
-
-#            app/build/outputs/apk/debug/app-debug.apk
-#            app/build/outputs/apk/release/app-debug.apk
             
+            #            app/build/outputs/apk/debug/app-debug.apk
+            #            app/build/outputs/apk/release/app-debug.apk
+
 
 #      - name: Create Tag
 #        uses: actions/create-release@v1
