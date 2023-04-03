@@ -56,7 +56,7 @@ name: Build and Test Android App on Pull Request
 #  push:
 #    branches:
       - 'master'
-
+on:
   pull_request:
 
 jobs:
