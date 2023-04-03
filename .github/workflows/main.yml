@@ -53,10 +53,10 @@
 name: Build and Test Android App on Pull Request
 
 on:
-  branches:
-    - 'main'
   push:
     tags:
+    branches:
+    - 'main'
 
 jobs:
   main:
