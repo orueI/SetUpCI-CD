@@ -1,0 +1,29 @@
+private String _getVersionName() {
+    return hasProperty("versionName") ? getProperty("versionName") : "offline"
+}
+
+private int _getVersionCode() {
+    return (hasProperty("versionCode") ? getProperty("versionCode").toInteger() : 1) + 102
+}
+
+private boolean isCI() {
+    return hasProperty("versionName")
+}
+
+ext {
+    config = [
+            ci: isCI(),
+    ]
+    versions = [
+            kotlinJvmTarget: 11,
+            application    : [
+                    versionName: "${_getVersionName()}",
+                    versionCode: _getVersionCode(),
+            ],
+            android        : [
+                    compileSdk: 30,
+                    minSdk    : 21,
+                    targetSdk : 30,
+            ],
+    ]
+}

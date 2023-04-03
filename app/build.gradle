@@ -11,8 +11,8 @@ android {
         applicationId "com.oruel.setupci"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode _getVersionCode()
+        versionName _getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +33,14 @@ android {
     buildFeatures {
         viewBinding true
     }
+}
+
+private String _getVersionName() {
+    return hasProperty("versionName") ? getProperty("versionName") : "offline"
+}
+
+private int _getVersionCode() {
+    return (hasProperty("versionCode") ? getProperty("versionCode").toInteger() : 1) + 102
 }
 
 dependencies {
