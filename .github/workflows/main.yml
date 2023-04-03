@@ -53,13 +53,12 @@
 name: Build and Test Android App on Pull Request
 
 on:
-  branches:
-    - 'main'
   push:
-    tags:
+    branches:
+    - 'dev'
 
 jobs:
-  main:
+  version_${{ github.run_id }}:
     runs-on: ubuntu-latest
 
     steps:
