@@ -52,15 +52,11 @@
 
 name: Build and Test Android App on Pull Request
 
-#on: TODO remove
-#  push:
-#    branches:
-      - 'master'
 on:
   pull_request:
 
 jobs:
-  build-and-test:
+  main:
     runs-on: ubuntu-latest
 
     steps:
