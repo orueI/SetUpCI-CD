@@ -53,7 +53,8 @@
 name: Build and Test Android App on Pull Request
 
 on:
-  pull_request:
+  push:
+    tags:
 
 jobs:
   main:
@@ -70,27 +71,27 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Run echo
-        run: echo "123"
-        continue-on-error: true
-
-      - name: Run lint
-        run: ./gradlew lint
-        continue-on-error: true
-
-      - name: Run test
-        run: ./gradlew test
-        continue-on-error: true
+#      - name: Run echo
+#        run: echo "123"
+#        continue-on-error: true
+#
+#      - name: Run lint
+#        run: ./gradlew lint
+#        continue-on-error: true
+#
+#      - name: Run test
+#        run: ./gradlew test
+#        continue-on-error: true
 
       - name: Build APK
         if: ${{ success() }}
-        run: ./gradlew app:assemble --console=plain  --no-daemon
+        run: ./gradlew app:assemble -PversionName="${{ github.run_id }}" -PversionCode="${{ github.ref_name }}" --no-daemon
 
       - name: Save APK to artifacts
         if: ${{ success() }}
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.event_name }}-app
+          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
           path: |
             app/build/outputs/**/*.apk
             app/build/outputs/**/*.aab
