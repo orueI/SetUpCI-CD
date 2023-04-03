@@ -50,7 +50,8 @@
 #          path: app/build/outputs/apk/debug/app-debug.apk
 
 
-name: version_${{ github.run_id }}
+name: Build
+description: version_${{ github.run_id }}
 
 on:
   push:
