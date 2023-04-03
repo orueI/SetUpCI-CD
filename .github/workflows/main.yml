@@ -51,7 +51,6 @@
 
 
 name: Build
-description: version_${{ github.run_id }}
 
 on:
   push:
