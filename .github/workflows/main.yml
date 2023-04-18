@@ -49,17 +49,15 @@
 #          name: ${{ github.event_name }}-app
 #          path: app/build/outputs/apk/debug/app-debug.apk
 
-
-name: Build and Test Android App on Pull Request
+name: Build
 
 on:
-  branches:
-    - 'main'
   push:
-    tags:
+    branches:
+      - 'dev'
 
 jobs:
-  main:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -73,33 +71,42 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-#      - name: Run echo
-#        run: echo "123"
-#        continue-on-error: true
-#
-#      - name: Run lint
-#        run: ./gradlew lint
-#        continue-on-error: true
-#
-#      - name: Run test
-#        run: ./gradlew test
-#        continue-on-error: true
+      #      - name: Run echo
+      #        run: echo "123"
+      #        continue-on-error: true
+      #
+      #      - name: Run lint
+      #        run: ./gradlew lint
+      #        continue-on-error: true
+      #
+      #      - name: Run test
+      #        run: ./gradlew test
+      #        continue-on-error: true
+      - name: Echo name
+        run: echo ${{ github.ref_name }}
+
+      - name: Echo id
+        run: echo ${{ github.run_id }}
 
       - name: Build APK
         if: ${{ success() }}
-        run: ./gradlew app:assemble -PversionName="${{ github.run_id }}" -PversionCode="${{ github.ref_name }}" --no-daemon
+        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
 
-      - name: Save APK to artifacts
+      - name: Build APK
         if: ${{ success() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
-          path: |
-            app/build/outputs/**/*.apk
-            app/build/outputs/**/*.aab
-            
-            #            app/build/outputs/apk/debug/app-debug.apk
-            #            app/build/outputs/apk/release/app-debug.apk
+        run: ./gradlew app:bundleCmlRelease -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
+
+#      - name: Save APK to artifacts
+#        if: ${{ success() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
+#          path: |
+#            app/build/outputs/**/*.apk
+#            app/build/outputs/**/*.aab
+#
+#            #            app/build/outputs/apk/debug/app-debug.apk
+#            #            app/build/outputs/apk/release/app-debug.apk
 
 
 #      - name: Create Tag
