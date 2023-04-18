@@ -2,7 +2,7 @@
 name: Build
 
 on:
-  tag:
+  release:
     created:
 
 jobs:
