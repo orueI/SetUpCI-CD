@@ -36,7 +36,7 @@ jobs:
         uses: amitsingh-007/next-release-tag@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: '1.6.12'
+          tag_prefix: '1.6.13'
           tag_template: "dd.i"
 
       - name: Create Release
