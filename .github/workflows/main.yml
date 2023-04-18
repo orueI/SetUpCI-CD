@@ -49,7 +49,6 @@
 #          name: ${{ github.event_name }}-app
 #          path: app/build/outputs/apk/debug/app-debug.apk
 
-
 name: Build
 
 on:
@@ -93,17 +92,21 @@ jobs:
         if: ${{ success() }}
         run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
 
-      - name: Save APK to artifacts
+      - name: Build APK
         if: ${{ success() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
-          path: |
-            app/build/outputs/**/*.apk
-            app/build/outputs/**/*.aab
-            
-            #            app/build/outputs/apk/debug/app-debug.apk
-            #            app/build/outputs/apk/release/app-debug.apk
+        run: ./gradlew app:bundleCmlRelease -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
+
+#      - name: Save APK to artifacts
+#        if: ${{ success() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
+#          path: |
+#            app/build/outputs/**/*.apk
+#            app/build/outputs/**/*.aab
+#
+#            #            app/build/outputs/apk/debug/app-debug.apk
+#            #            app/build/outputs/apk/release/app-debug.apk
 
 
 #      - name: Create Tag
