@@ -37,7 +37,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: '1.6.12'
-          tag_template: "i"
+          tag_template: "dd.i"
 
       - name: Create Release
         uses: actions/create-release@v1
