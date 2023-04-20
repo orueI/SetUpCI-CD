@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - master
+      - dev
 
 jobs:
   build:
@@ -22,6 +23,15 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
+
+      - name: Echo previoustag
+        run: echo ${{ steps.previoustag.outputs.tag }}
+
       - name: Echo name
         run: echo ${{ github.ref_name }}
 
@@ -31,32 +41,33 @@ jobs:
 
 
 
-      - name: Generate release tag
-        id: generate_release_tag
-        uses: amitsingh-007/next-release-tag@v4.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: '1.6.13'
-          tag_template: "i"
-
+#      - name: Generate release tag
+#        id: generate_release_tag
+#        uses: amitsingh-007/next-release-tag@v4.0.0
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          tag_prefix: '1.6.13'
+#          tag_template: "d.i"
+#
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.generate_release_tag.outputs.next_release_tag }}
-          release_name: Release ${{ steps.generate_release_tag.outputs.next_release_tag }}
+          prerelease: true
+          tag_name: ${{ steps.previoustag.outputs.tag }}
+          release_name: Release ${{ steps.previoustag.outputs.tag }}
 
 
 
 
       - name: Build APK
         if: ${{ success() }}
-        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.run_number }}" --no-daemon
+        run: ./gradlew app:assemble -PversionName="${{ steps.previoustag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
 
       - name: Build ABB
         if: ${{ success() }}
-        run: ./gradlew app:bundleCmlRelease -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.run_number }}" --no-daemon
+        run: ./gradlew app:bundleCmlRelease -PversionName="${{ steps.previoustag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
 
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1

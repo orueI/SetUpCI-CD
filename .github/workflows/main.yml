@@ -1,134 +1,134 @@
-#name: Build and Test Android App
+##name: Build and Test Android App
+##
+##on:
+##  push:
+##    branches: [ "master" ]
+##  pull_request:
+##    branches: [ "master" ]
+##
+###  push:
+###    branches: ["main", "dev", "master"]
+###  pull_request:
+###    branches: ["main", "dev", "master"]
+##
+##jobs:
+##  build-and-test:
+##    runs-on: ubuntu-latest
+##
+##    steps:
+##      - name: Checkout code
+##        uses: actions/checkout@v2
+##
+##      #      - name: Setup JDK
+##      #        uses: actions/setup-java@v2
+##      #        with:
+##      #          java-version: '11'
+##      - name: set up JDK 11
+##          uses: actions/setup-java@v2
+##          with:
+##            java-version: '11'
+##            distribution: 'temurin'
+##            cache: gradle
+##
+##      - name: Run lint
+##        run: ./gradlew lintDebug
+##        continue-on-error: true
+##
+##      - name: Run tests
+##        run: ./gradlew testDebug
+##        continue-on-error: true
+##
+##      - name: Build APK
+##        if: ${{ success() }}
+##        run: ./gradlew assembleDebug --console=plain
+##
+##      - name: Save APK to artifacts
+##        uses: actions/upload-artifact@v2
+##        if: ${{ success() }}
+##        with:
+##          name: ${{ github.event_name }}-app
+##          path: app/build/outputs/apk/debug/app-debug.apk
+#
+#name: Build
 #
 #on:
 #  push:
-#    branches: [ "master" ]
-#  pull_request:
-#    branches: [ "master" ]
-#
-##  push:
-##    branches: ["main", "dev", "master"]
-##  pull_request:
-##    branches: ["main", "dev", "master"]
+#    branches:
+#      - 'dev'
 #
 #jobs:
-#  build-and-test:
+#  build:
 #    runs-on: ubuntu-latest
 #
 #    steps:
 #      - name: Checkout code
 #        uses: actions/checkout@v2
 #
-#      #      - name: Setup JDK
-#      #        uses: actions/setup-java@v2
-#      #        with:
-#      #          java-version: '11'
-#      - name: set up JDK 11
-#          uses: actions/setup-java@v2
-#          with:
-#            java-version: '11'
-#            distribution: 'temurin'
-#            cache: gradle
+#      - name: Setup JDK
+#        uses: actions/setup-java@v2
+#        with:
+#          java-version: '11'
+#          distribution: 'temurin'
+#          cache: gradle
 #
-#      - name: Run lint
-#        run: ./gradlew lintDebug
-#        continue-on-error: true
+#      #      - name: Run echo
+#      #        run: echo "123"
+#      #        continue-on-error: true
+#      #
+#      #      - name: Run lint
+#      #        run: ./gradlew lint
+#      #        continue-on-error: true
+#      #
+#      #      - name: Run test
+#      #        run: ./gradlew test
+#      #        continue-on-error: true
+#      - name: Echo name
+#        run: echo ${{ github.ref_name }}
 #
-#      - name: Run tests
-#        run: ./gradlew testDebug
-#        continue-on-error: true
+#      - name: Echo id
+#        run: echo ${{ github.run_id }}
 #
 #      - name: Build APK
 #        if: ${{ success() }}
-#        run: ./gradlew assembleDebug --console=plain
+#        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
 #
-#      - name: Save APK to artifacts
-#        uses: actions/upload-artifact@v2
+#      - name: Build APK
 #        if: ${{ success() }}
-#        with:
-#          name: ${{ github.event_name }}-app
-#          path: app/build/outputs/apk/debug/app-debug.apk
-
-name: Build
-
-on:
-  push:
-    branches:
-      - 'dev'
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
-
-      #      - name: Run echo
-      #        run: echo "123"
-      #        continue-on-error: true
-      #
-      #      - name: Run lint
-      #        run: ./gradlew lint
-      #        continue-on-error: true
-      #
-      #      - name: Run test
-      #        run: ./gradlew test
-      #        continue-on-error: true
-      - name: Echo name
-        run: echo ${{ github.ref_name }}
-
-      - name: Echo id
-        run: echo ${{ github.run_id }}
-
-      - name: Build APK
-        if: ${{ success() }}
-        run: ./gradlew app:assemble -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
-
-      - name: Build APK
-        if: ${{ success() }}
-        run: ./gradlew app:bundleCmlRelease -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
-
-#      - name: Save APK to artifacts
-#        if: ${{ success() }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
-#          path: |
-#            app/build/outputs/**/*.apk
-#            app/build/outputs/**/*.aab
+#        run: ./gradlew app:bundleCmlRelease -PversionName="${{ github.ref_name }}" -PversionCode="${{ github.event.number }}" --no-daemon
 #
-#            #            app/build/outputs/apk/debug/app-debug.apk
-#            #            app/build/outputs/apk/release/app-debug.apk
-
-
-#      - name: Create Tag
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: v1.0.0 # Replace this with your desired tag name
-#          release_name: Release ${{ github.sha }}
-#          body: |
-#            This is the release description.
+##      - name: Save APK to artifacts
+##        if: ${{ success() }}
+##        uses: actions/upload-artifact@v2
+##        with:
+##          name: ColorMyLife_${{ github.ref_name }}(${{ github.run_id }})
+##          path: |
+##            app/build/outputs/**/*.apk
+##            app/build/outputs/**/*.aab
+##
+##            #            app/build/outputs/apk/debug/app-debug.apk
+##            #            app/build/outputs/apk/release/app-debug.apk
 #
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: v1.0.0 # Replace this with the same tag name used in the previous step
-#          release_name: Release ${{ github.sha }}
-#          draft: false
-#          prerelease: false
+#
+##      - name: Create Tag
+##        uses: actions/create-release@v1
+##        env:
+##          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+##        with:
+##          tag_name: v1.0.0 # Replace this with your desired tag name
+##          release_name: Release ${{ github.sha }}
+##          body: |
+##            This is the release description.
+##
+##      - name: Create Release
+##        id: create_release
+##        uses: actions/create-release@v1
+##        env:
+##          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+##        with:
+##          tag_name: v1.0.0 # Replace this with the same tag name used in the previous step
+##          release_name: Release ${{ github.sha }}
+##          draft: false
+##          prerelease: false
 #
 #      - name: Upload APK to Release
 #        uses: actions/upload-release-asset@v1
@@ -139,4 +139,4 @@ jobs:
 #          asset_path: ./app/build/outputs/apk/debug/app-debug.apk
 #          asset_name: app-debug.apk
 #          asset_content_type: application/vnd.android.package-archive
-#
+##
