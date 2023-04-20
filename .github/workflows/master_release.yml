@@ -35,21 +35,6 @@ jobs:
       - name: Echo id
         run: echo ${{ github.run_number }}
 
-
-
-
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          prerelease: true
-          tag_name: ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
-          release_name: Release ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
-
-
-
-
       - name: Build APK
         if: ${{ success() }}
         run: ./gradlew app:assemble -PversionName="${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
@@ -58,14 +43,25 @@ jobs:
         if: ${{ success() }}
         run: ./gradlew app:bundleRelease -PversionName="${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
 
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: true
+          tag_name: ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
+          release_name: Release ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
+
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            app/build/outputs/**/*.apk
-            app/build/outputs/**/*.aab
-          asset_name: app-debug.apk
-          asset_content_type: application/vnd.android.package-archive
+          asset_path: ./app/build/outputs/**/*.apk
+#          asset_path: |
+#            app/build/outputs/**/*.apk
+#            app/build/outputs/**/*.aab
+          asset_name: builds
+          asset_content_type: application/zip
