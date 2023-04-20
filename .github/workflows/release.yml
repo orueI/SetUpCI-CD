@@ -42,7 +42,8 @@ jobs:
 
       - name: Build ABB
         if: ${{ success() }}
-        run: ./gradlew app:bundleCmlRelease -PversionName="${{ steps.previoustag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
+        run: ./gradlew app:bundleRelease -PversionName="${{ steps.previoustag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
+#        run: ./gradlew app:bundleCmlRelease -PversionName="${{ steps.previoustag.outputs.tag }}.${{ github.run_number }}" -PversionCode="${{ github.run_number }}" --no-daemon
 
       - name: Create Release
         uses: actions/create-release@v1
