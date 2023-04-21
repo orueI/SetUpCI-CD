@@ -60,6 +60,8 @@ jobs:
           mkdir artifacts
           find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
           zip -r builds.zip artifacts
+          cd artifacts
+          ls
 
 #      - name: Download artifacts
 #        id: download_artifact

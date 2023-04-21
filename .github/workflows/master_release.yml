@@ -77,6 +77,8 @@ jobs:
           mkdir artifacts
           find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
           zip -r builds.zip artifacts
+          cd artifacts
+          ls
 
 
       - name: Upload APK to Release
