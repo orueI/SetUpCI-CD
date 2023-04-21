@@ -63,12 +63,12 @@ jobs:
             app/build/outputs/**/*.apk
             app/build/outputs/**/*.aab
 
-      -  name: Download artifacts
-         id: download_artifact
-         uses: actions/download-artifact@v3
-          with:
-            name: artifacts
-            path: artifact
+      - name: Download artifacts
+        id: download_artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts
+          path: artifact
 
       - name: Echo Download artifacts
         run: echo ${{ steps.download_artifact.outputs.download_path }}
