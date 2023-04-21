@@ -57,9 +57,9 @@ jobs:
       - name: Save APK to artifacts
         if: ${{ success() }}
         run: |
-          - mkdir artifacts
-          - find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
-          - zip -r builds.zip artifacts
+          mkdir artifacts
+          find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
+          zip -r builds.zip artifacts
 
 #      - name: Download artifacts
 #        id: download_artifact
