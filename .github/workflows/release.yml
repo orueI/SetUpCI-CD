@@ -58,7 +58,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.event_name }}-app
+          name: build-${{ steps.previoustag.outputs.tag }}
           path: |
             app/build/outputs/**/*.apk
             app/build/outputs/**/*.aab
@@ -67,7 +67,7 @@ jobs:
         id: download_artifact
         uses: actions/download-artifact@v3
         with:
-          name: artifacts
+          name: build-${{ steps.previoustag.outputs.tag }}
           path: artifact
 
       - name: Echo Download artifacts
