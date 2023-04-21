@@ -53,24 +53,30 @@ jobs:
           tag_name: ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
           release_name: Release ${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
 
+#      - name: Save APK to artifacts
+#        if: ${{ success() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: build-${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
+#          path: |
+#            app/build/outputs/**/*.apk
+#            app/build/outputs/**/*.aab
+#
+#      -  name: Download artifacts
+#         id: download_artifact
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: build-${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
+#           path: artifact
+#
+#      - name: Echo Download artifacts
+#        run: echo ${{ steps.download_artifact.outputs.download-path }}
       - name: Save APK to artifacts
         if: ${{ success() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
-          path: |
-            app/build/outputs/**/*.apk
-            app/build/outputs/**/*.aab
-
-      -  name: Download artifacts
-         id: download_artifact
-         uses: actions/download-artifact@v3
-         with:
-           name: build-${{ steps.get-latest-tag.outputs.tag }}.${{ github.run_number }}
-           path: artifact
-
-      - name: Echo Download artifacts
-        run: echo ${{ steps.download_artifact.outputs.download-path }}
+        run: |
+          - mkdir artifacts
+          - find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
+          - zip -r builds.zip artifacts
 
 
       - name: Upload APK to Release
@@ -79,6 +85,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.download_artifact.outputs.download-path }}
+          asset_path: ./artifacts
           asset_name: builds
           asset_content_type: application/vnd.android.package-archive
