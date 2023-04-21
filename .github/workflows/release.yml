@@ -54,14 +54,31 @@ jobs:
           tag_name: ${{ steps.tag.outputs.tag }}
           release_name: Release ${{ steps.tag.outputs.tag }}
 
+      - name: Save APK to artifacts
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event_name }}-app
+          path: |
+            app/build/outputs/**/*.apk
+            app/build/outputs/**/*.aab
+
+      -  name: Download artifacts
+         id: download_artifact
+         uses: actions/download-artifact@v3
+          with:
+            name: artifacts
+            path: artifact
+
+      - name: Echo Download artifacts
+        run: echo ${{ steps.download_artifact.outputs.download_path }}
+
       - name: Upload APK to Release
         uses: shogo82148/actions-upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            ./app/build/outputs/**/*.apk
-            ./app/build/outputs/**/*.aab
+          asset_path: ${{ steps.download_artifact.outputs.download_path }}
           asset_name: builds
           asset_content_type: application/vnd.android.package-archive
