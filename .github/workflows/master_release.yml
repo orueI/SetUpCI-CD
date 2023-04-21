@@ -75,9 +75,11 @@ jobs:
         if: ${{ success() }}
         run: |
           mkdir artifacts
-          find -regex '.+\.((apk)|(aab))' -exec cp -t ./artifacts {} +
+          find -regex '.+\.apk' -exec cp -t ./artifacts {} +
+          find -regex '.+\.aab' -exec cp -t ./artifacts {} +
           zip -r builds.zip artifacts
-
+          cd artifacts
+          ls
 
       - name: Upload APK to Release
         uses: shogo82148/actions-upload-release-asset@v1
